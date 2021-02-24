@@ -1,0 +1,398 @@
+/**
+ * Pn=n! (2006) by Iván Marino
+ * ES6 restoration for the media art installation developed in Macromedia Flash
+ * Original work: http://www.ivan-marino.net/08/swf_as2/desastres/06.html (needs Adobe Flash Player)
+
+ * @developer Marcelo Terreni (http://www.terreni.com.ar/)
+ * @CSS + E6 + HandBrakeCLI
+ * @date June 2020
+**/
+
+/*====================*/
+/*    INTRO LAYOUT    */
+/*====================*/
+
+html{
+	--line-color: rgba(255,255,255,.4);	
+}
+
+
+body{
+	background: #000;
+	color: #FFF;
+	font: 100%/1 "Aktiv Grotesk", Arial, Helvetica, sans-serif;
+	font-weight: 200;
+}
+
+.intro{
+	background: #151515;
+	background: radial-gradient(farthest-corner at -17% 70%, #112760 0%, #050720 40%) no-repeat 0 0;
+	color: #FFF;
+	box-sizing: border-box;
+	padding: 0 14px;
+	width: 100vw;
+	min-height: 100%;
+  position: absolute;
+  z-index: 1;
+  text-align: center;
+}
+
+@media screen and (min-width: 50em){
+
+	.intro{
+		width: 100%;
+		padding: 19px;
+		box-shadow: inset #050720 0 0 0 18px, inset var(--line-color) 0 0 0 19px;	
+	}
+
+}
+
+.intro-description{
+	display: grid;
+	grid-template-columns: 1fr minmax(0, 40rem) 1fr;
+	grid-template-rows: repeat(4, max-content);
+	margin-top: 6rem;
+	text-align: left;
+}
+
+@media screen and (min-width: 50em){
+	.intro-description{
+		
+	}
+}
+
+.intro-description > *{
+	grid-column: 2 / 3;
+}
+
+
+/*===================*/
+/*  LANGUAGES MENU   */
+/*===================*/
+.intro-langmenu{
+	position: absolute;
+	top: 4px;
+	right: 8px;
+
+	display: flex;
+	margin-left: 10px;
+	color: #ECEAE6;
+	text-transform: uppercase;
+	font-size: .75rem;
+	letter-spacing: .05rem;
+	margin-top: 1.125rem;
+	margin-bottom: 1.5rem;
+}
+
+.intro-langmenu a{
+	color: currentColor;
+	text-decoration: none;
+	font-weight: 200;
+	border: 1px solid var(--line-color);
+	padding: 9px 11px 7px 12px;
+}
+
+.intro-langmenu a span{
+	position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 25em){
+
+	.intro-langmenu{
+		top: 24px;
+		right: 32px;
+	}
+
+	.intro-langmenu li:nth-child(2){ 
+		margin-left: 12px;
+	}
+
+	.intro-langmenu a span{
+		position: static;
+	  height: auto;
+	  width: auto;
+	  overflow: visible;
+	}
+}
+
+.intro-langmenu a:not([aria-current="true"]):hover{
+	background: #FFF;
+	color: #000;
+}
+
+.intro-langmenu a[aria-current="true"]{
+	border: none;
+	font-weight: 700;
+	padding-left: 12px;
+}
+
+
+/* ========================= */
+/*     INTRODUCTION TEXT     */
+/* ========================= */
+.intro-description-title{
+	font: bold 1.5rem/1.15 "DINPro Cond Bold", Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	margin-top: 5px;
+	max-width: 34ch;
+	color: #B9FF2F;
+  background-image: linear-gradient(45deg, #B9FF2F 0, #B9FF2F 20%, #34B9E7 75%);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+	
+	-webkit-text-fill-color: transparent; 
+  -moz-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
+
+@media screen and (min-width: 25em){
+	.intro-description-title{
+		font-size: calc(1.5rem + (2.5 - 1.5) * (100vw - 25rem) / (40 - 25));
+	}
+}
+
+@media screen and (min-width: 40em){
+	.intro-description-title{
+		font-size: 2.5rem;
+	}
+}
+
+.intro-description-bio{
+	font-size: 0.9375rem;
+	line-height: 1.46;
+}
+
+.intro-description-bio p{
+	margin-bottom: 1.3rem;
+}
+
+
+.intro-description-bio p a{
+	color: currentColor;
+	font-weight: 500;
+	text-decoration: none;
+	border-bottom: 1px solid var(--line-color); 
+}
+
+/* ====================== */
+/*     VIDEO LOADINGS     */
+/* ====================== */
+.intro-description-loading-list{
+	display: flex;
+	grid-row: 2 / 3;
+	justify-content: space-between;
+	margin: 1.5rem 0;
+}
+
+.intro-description-loading-list-item{
+	position: relative;
+	border: 1px solid #EEEAE8;
+	width: 30%;
+	flex: 0 1 auto;
+	display: grid;
+	grid-template-columns: minmax(10px, max-content); 
+	grid-template-rows: minmax(10px, max-content); 
+	align-items: center;
+	justify-items: center;
+}
+
+.intro-description-loading-list-item img, .intro-description-loading-list-item video{
+	grid-column: 1 / 2;
+	grid-row: 1 / 2;
+	width: 100%;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+.intro-description-loading-list-item p{
+	grid-column: 1 / 2;
+	grid-row: 1 / 2;
+	z-index: 1;
+	text-transform: uppercase;
+	font-size: .6875rem;
+	font-weight: 700;
+	max-width: 9ch;
+	background: url(../img/loading.svg) no-repeat 0 0;
+	background-size: 16px 16px;
+	padding-left: 20px;
+}
+
+.intro-description-loading-list-item video{ display: none; }
+.intro-description-loading-list-item_loaded video{	display: block; }
+
+.intro-description-loading-list-item::after{
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,.8);
+}
+
+.intro-description-loading-list-item::after, .intro-description-loading-list-item p{
+	transition: opacity 300ms ease;
+}
+
+.intro-description-loading-list-item_loaded::after, .intro-description-loading-list-item_loaded p{
+	opacity: 0;
+}
+
+
+/* ================== */
+/*    START BUTTON    */
+/* ================== */
+.intro-description-start-btn{
+	padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+
+	justify-self: start;
+	display: flex;
+	align-items: center;
+	pointer-events: none; /* disable button till is ready */
+	font-weight: 700;
+}
+
+.intro-description-start-btn svg path:nth-child(1){
+	fill: #B9FF2F;
+}
+
+.intro-description-start-btn svg path:nth-child(2){
+	fill: #050720;
+}
+
+.intro-description-start-btn span{
+	margin-left: 20px;
+	padding-top: 5px;
+}
+
+
+/*======================*/
+/*    BUTTON FADE IN    */
+/*======================*/
+/* Disable button till videos are loaded */
+.fade-in{ transition: opacity 300ms ease;	}
+
+.intro-description-start-btn{ opacity: 0; }
+.intro-description-start-btn-on{ 
+	opacity: 1; 
+	pointer-events: auto;
+}
+
+/* make sure start btn is displayed as flex during transition  */
+.fade-in.intro-description-start-btn-on{
+	display: flex;
+}
+
+/* ============= */
+/*    CREDITS    */
+/* ============= */
+.intro-description-credits{
+	font-size: 0.9375rem;
+	line-height: 1.3;
+	margin-bottom: 1.5rem
+}
+
+.intro-description-credits strong{ font-weight: 700; }
+
+.intro-description-credits a{
+	color: currentColor;
+	font-weight: 700;
+	text-decoration: none;
+	border-bottom: 1px solid var(--line-color);
+}
+
+@media screen and (min-width: 93em){
+
+	p.intro-description-credits{
+		position: absolute;
+		top: 50%;
+		left: 32px;
+		writing-mode: vertical-rl;
+		transform: translateY(-50%) rotate(180deg);
+		text-transform: uppercase;
+		font-size: .6875rem;
+		letter-spacing: .05rem;
+		margin-bottom: 0;
+	}
+
+	.intro-description-credits a{ 
+		color: currentColor;
+		text-decoration: none;
+		font-weight: 700;
+		padding-right: 1px;
+		padding-left: 1px;
+		border-left: 1px solid var(--line-color); 
+		border-bottom: none;
+	}
+
+}
+
+/* ================= */
+/*    VIEW GITHUB    */
+/* ================= */
+.intro-description-viewsource{
+	display: block;
+	color: currentColor;
+	text-align: center;
+  padding-bottom: 5px;
+  font-size: 0.6875rem;
+  letter-spacing: .05rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: 12.5rem;
+  margin: 30px auto 10px auto;
+  background: linear-gradient(90deg, var(--line-color), var(--line-color)) no-repeat center bottom;
+  background-size: 24ch 1px;
+}
+
+
+@media screen and (min-width: 93em){
+	.intro-description-viewsource{
+		position: absolute;
+		bottom: 31px;
+		right: 30px;
+		border: 1px solid var(--line-color);
+		padding: 13px 13px 10px 13px;
+		width: auto;
+		margin-bottom: 0;
+		background: none;
+	}
+
+	.intro-description-viewsource:hover{
+		background: #FFF;
+		color: #000;
+		border-color: #FFF;
+	}
+
+}
+
+.intro-description-viewsource strong{ font-weight: 700; }
+
+
+/*======================*/
+/*    INTRO FADE OUT    */
+/*======================*/
+.fade-out{
+	transition: opacity 400ms 250ms ease;
+}
+
+/* make sure intro is displayed as block/flex/grid during transition  */
+.fade-out.intro-off{
+	display: block;
+	opacity: 0;
+}
+
+.intro-off{ display: none; }

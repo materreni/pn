@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>A Javascript restoration of «Pn=n!» (2006) by Iván Marino :: Marcelo Terreni</title>
+
+  <link href="src/css/reset_and_fonts.css" rel="stylesheet">
+  <link href="src/css/intro.css" rel="stylesheet">
+  <link href="src/css/pn.css" rel="stylesheet">
+
+  <script src="src/js/pn.js" defer></script>
+
+  <!--
+   * Pn=n! (2006) by Iván Marino
+   * ES6 restoration for the media art installation developed in Macromedia Flash
+   * Original work: http://www.ivan-marino.net/08/swf_as2/desastres/06.html (needs Adobe Flash Player)
+
+   * @developer Marcelo Terreni (http://www.terreni.com.ar/)
+   * @CSS + E6 + HandBrakeCLI
+   * @date June 2020
+  -->
+
+</head>
+<body>
+
+  <div class="intro">
+
+    <ul class="intro-langmenu">
+      <li><a href="http://pn.terreni.com.ar/" lang="en" aria-current="true">En<span>glish</span></a></li>
+      <li><a href="http://pn.terreni.com.ar/?lang=es" lang="es">Es<span>pañol</span></a></li>
+    </ul>    
+
+    <div class="intro-description">
+
+      <h1 class="intro-description-title">A Javascript restoration of <cite class="pn-title">P<sub>n</sub>=n!</cite>&nbsp;(2006) by <span lang="es">Iván Marino</span> built with ES6, MSE, CSS & HandbrakeCLI</h1>
+      <div class="intro-description-bio">
+        <p>First exhibited in March 2006, <cite class="pn-title">P<sub>n</sub>=n!</cite> was a media art installation developed in Flash by the argentinian artist <span lang="es">Iván Marino</span>. A sequence from the film <cite lang="fr">“La Passion de Jeanne d'Arc”</cite> (1928) by Carl T. Dreyer was divided into its constituent shots and repurposed to address the idea of torture as an algorithm, a piece of software. For every new sequence in the project, an individual shot from the film was randomly selected and reedited into a new progression that would fatally mirror the three semantic cornerstones present in several torture procedures: victims, victimizers and torture instruments.</p>
+        <p>For this conservation project I rewrote the code from scratch with ES6, used the MediaSource Element to manage video playback and built a responsive CSS layout to meet the requirements of the modern web. Although the source video was reprocessed with HandbrakeCLI from a more recent transfer of the film, I took care to mimic the look and feel of the original *.flv files in After Effects. A detailed tutorial of this new media restoration work is coming up soon. Meanwhile, <a href="http://terreni.com.ar">check any of the other works in my personal portfolio</a>.</p>
+      </div>  
+
+      <p class="intro-description-credits">Restored with ES6, CSS & FFMPEG by <a href="http://www.terreni.com.ar">Marcelo Terreni</a>.</p>
+        
+      <button class="intro-description-start-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36px" height="36px" viewBox="0 0 36 36" >
+          <path d="M7.42,32.56C-0.61,26.73-2.4,15.5,3.41,7.46C9.22-0.58,20.44-2.41,28.5,3.38c8.06,5.79,9.91,17.01,4.15,25.08 c-5.77,8.07-16.98,9.96-25.07,4.22"/>
+          <path d="M14.09,12.69l9.84-0.03 v10h-2.09v-6.5l-8.6,8.59l-1.5-1.47l8.55-8.53h-6.18L14.09,12.69z"/>
+        </svg>
+        <span>View <cite class="pn-title">P<sub>n</sub>=n!</cite> restoration</span>
+      </button>        
+
+      <div class="intro-description-loading-list">
+        <div class="intro-description-loading-list-item">
+          <img src="src/poster/t_08.jpg" alt="" />
+          <video muted="muted" playsinline></video>
+          <p>Loading Judges</p>
+        </div>
+        <div class="intro-description-loading-list-item">
+          <img src="src/poster/j_02.jpg" alt="" />
+          <video muted="muted" playsinline></video>
+          <p>Loading Jeanne</p>
+        </div>
+        <div class="intro-description-loading-list-item">
+          <img src="src/poster/m_11.jpg" alt="" />
+          <video muted="muted" playsinline></video>
+          <p>Loading Machines</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <a href="https://github/materreni/pn" class="intro-description-viewsource">View source in <strong>GitHub</strong></a>
+
+  </div>
+
+
+	<div class="pn">
+
+		<ul class="info-display-references">
+			<li class="references-playlist">>>Permutation: <span class="shot-update">0</span></li>
+			<li class="references-remaining">>><span class="shot-update">0</span> remanining shot<span class="shot-update">s</span> in this permutation</li>	
+			<li class="references-length">>>Length: <span class="shot-update">0</span> msec.</li>
+			<li class="references-shot">>><span class="shot-playing">Playing </span>shot: <span class="shot-update">null</span></li>
+			<li class="references-nomenclature">>>Nom<span>enclature</span>: t_ = witness; j_ = victim; m_ = torture machine</li>
+		</ul>
+
+		<div class="info-display-playlists">
+		</div>	
+		
+		<p class="info-display-buffer">Netstream.Buffer.Empty</p>
+
+</body>
+</html>

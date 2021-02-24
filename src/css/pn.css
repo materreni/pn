@@ -1,0 +1,554 @@
+/**
+ * Pn=n! (2006) by Iván Marino
+ * ES6 restoration for the media art installation developed in Macromedia Flash
+ * Original work: http://www.ivan-marino.net/08/swf_as2/desastres/06.html (needs Adobe Flash Player)
+
+ * @developer Marcelo Terreni (http://www.terreni.com.ar/)
+ * @CSS + E6 + HandBrakeCLI
+ * @date June 2020
+**/
+
+@font-face {
+  font-family: "SWFTv01"; font-style: normal; font-weight: normal;
+  src: url('../fonts/swftv01/SWFTv01.woff2') format('woff2'),
+  url('../fonts/swftv01/SWFTv01.woff') format('woff');
+}
+
+html{
+	--emphasis-color: #09E609;
+
+	/* This formula allows to use uniteless values 
+		valid for both viewport orientation modes. 
+		Example: prevents specifing "4vh" and its 
+		equivalent "3vw" in different media queries*/
+	--aspect-ratio-factor: 1;
+	--orientation-unit: 1vh;
+	--orientation-multiplier: calc(var(--orientation-unit) * var(--aspect-ratio-factor));
+}
+
+@media screen and (max-aspect-ratio: 4/3){
+	html{	
+		--aspect-ratio-factor: .7355;
+		--orientation-unit: 1vw;
+		--orientation-multiplier: calc(var(--orientation-unit) * var(--aspect-ratio-factor));
+	}
+}
+
+/*=======================*/
+/*   CONTAINER LAYOUT    */
+/*=======================*/
+
+body{
+	display: flex;
+	justify-content: center;
+}
+
+.pn{
+  height: 100vh;
+  width: 136vh; /* should use calc + var(--aspect-ratio-factor) but it's only avalable when max-aspect-ratio: 4/3  */
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "SWFTv01", monospace;
+  opacity: 0;
+}
+
+/* Class to show pn layout only when it's ready to play */
+.pn.pn-ready{
+	opacity: 1;
+}
+
+.pn video{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+	/*filter: hue-rotate(100deg);*/
+}
+
+
+/* "Width 100% mode" for aspect ratios lower or equal to 4/3  */
+@media screen and (max-aspect-ratio: 4/3) { 
+		
+	.pn{
+		width: 100vw;
+		height: calc(100vw * var(--aspect-ratio-factor));
+		top: 50%;
+  	left: 0;
+		transform: translate(0, -50%);
+	}
+
+}
+
+/*=================*/
+/*    FONT-SIZE    */
+/*=================*/
+
+.pn{ font-size: 0.5rem; }
+
+.playlist > li{ line-height: 1.7; }
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 540px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 734px){ 
+
+	.pn{ letter-spacing: 1px;	} 
+	.playlist{ letter-spacing: 0;	}
+
+}
+
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 601px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 816px){ 
+
+	.pn{ 
+		font-size: calc(2px + 1.02 * var(--orientation-multiplier)); 
+	} 
+
+}
+
+/*=======================================*/
+/*    SEMI-TRANSPARENT DISPLAY ON TOP    */
+/*=======================================*/
+.info-display-references{
+	position: absolute;
+	width: 100%;
+	box-sizing: border-box;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,.2);
+	color: var(--emphasis-color);
+	display: grid;
+	grid-template-rows: repeat(2, max-content);
+	grid-template-columns: max-content max-content;
+	grid-column-gap: 15px;
+	grid-row-gap: 0; 
+	padding-top: calc(1.9 * var(--orientation-multiplier));
+	padding-right: calc(.7 * var(--orientation-multiplier));
+	padding-bottom: calc(2.2 * var(--orientation-multiplier));
+	padding-left: calc(1.8 * var(--orientation-multiplier));
+}
+
+.references-shot{	
+	grid-column: 2 / 3; 
+	grid-row: 1 / 2; 
+	word-spacing: -4px;
+}
+
+.references-nomenclature{ 
+	grid-column: 1 / 3;
+	word-spacing: -2px;
+}
+
+/* Hide some data when there's not enough room */
+.references-shot .shot-playing, 
+.references-remaining,
+.references-nomenclature span,
+.references-length{
+	display: none;
+}
+
+@media screen and (min-aspect-ratio: 4/3) {
+
+	.info-display-references{
+		grid-row-gap: calc(2 * var(--orientation-multiplier));
+	}
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 320px){
+
+	.info-display-references{
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-column-gap: 0;
+		grid-template-rows: repeat(2, max-content);
+		grid-row-gap: calc(3 * var(--orientation-multiplier)); 
+		padding-top: calc(2.6 * var(--orientation-multiplier));
+		padding-right: calc(2 * var(--orientation-multiplier));
+		padding-bottom: calc(2.8 * var(--orientation-multiplier));
+		padding-left: calc(2 * var(--orientation-multiplier));
+	}
+
+	.references-remaining{	grid-column: 2 / 4; }
+	.references-shot{	
+		grid-column: 2 / 3; 
+		grid-row: 1 / 2; 
+	}
+	.references-length{	grid-column: 3 / 4; display: block;}
+
+	.references-nomenclature{ 
+		grid-column: 1 / 4; 
+		grid-row: 2 / 3; 
+		word-spacing: -1px; 
+	}
+
+}
+
+/*----------------------------*/
+/*  Portrait specific styles  */
+/*----------------------------*/
+
+@media screen and (max-aspect-ratio: 4/3){
+
+	.references-nomenclature, 
+	.references-length{ 
+		display: none;
+	}
+
+}
+
+
+@media screen and (max-aspect-ratio: 4/3) and (min-width: 320px){
+
+	.info-display-references{
+		grid-row-gap: calc(2.2 * var(--orientation-multiplier));
+	}
+
+	.references-nomenclature{ 
+		display: block;
+		word-spacing: -6px;
+	}
+
+}
+
+@media screen and (max-aspect-ratio: 4/3) and (min-width: 380px){
+
+	.info-display-references{
+		grid-row-gap: calc(2.4 * var(--orientation-multiplier)); 
+		padding-top: calc(2.3 * var(--orientation-multiplier));
+		padding-right: calc(3 * var(--orientation-multiplier));
+		padding-bottom: calc(2.2 * var(--orientation-multiplier));
+		padding-left: calc(3 * var(--orientation-multiplier));
+	}
+
+	.references-nomenclature{ 
+		word-spacing: -2px;
+	}
+
+}
+
+@media screen and (max-aspect-ratio: 4/3) and (min-width: 410px){
+	
+	.info-display-references{
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-column-gap: 0;
+		grid-row-gap: calc(2.2 * var(--orientation-multiplier)); 
+		padding-top: calc(1.9 * var(--orientation-multiplier));
+		padding-right: calc(.7 * var(--orientation-multiplier));
+		padding-bottom: calc(2.2 * var(--orientation-multiplier));
+		padding-left: calc(1.8 * var(--orientation-multiplier));
+	}
+
+	.references-playlist{
+		word-spacing: -6px;
+	}
+
+	.references-length{ 
+		display: inline;
+		grid-column: 3 / 4; 
+		word-spacing: -6px;
+	}
+
+	.references-shot{	
+		grid-column: 2 / 3; 
+		grid-row: 1 / 2; 
+		word-spacing: -6px;
+	}
+
+	.references-nomenclature{ 
+		grid-column: 1 / 4; 
+		word-spacing: 0;
+	}
+
+}
+
+/*-----------------------------------*/
+/*  Portrait/Landscape shared styles  */
+/*-----------------------------------*/
+
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 330px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 460px){
+
+	.references-length{ display: block; }
+	.references-nomenclature span{ display: inline;	}
+
+}
+
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 390px), 
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 532px) {
+	
+	.info-display-references{
+		grid-row-gap: calc(2.4 * var(--orientation-multiplier)); 
+		padding-bottom: calc(2.6 * var(--orientation-multiplier));
+	}
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 435px), 
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 592px) {
+	
+	.info-display-references{
+		grid-template-columns: 1fr 2fr 1fr;
+		grid-row-gap: calc(2.2 * var(--orientation-multiplier)); 
+		padding-top: calc(1.9 * var(--orientation-multiplier));
+		padding-bottom: calc(2.1 * var(--orientation-multiplier));
+	}
+
+	.references-playlist{	grid-column: 1 / 2; }
+	.references-remaining{	grid-column: 2 / 3; }
+	.references-length{	grid-column: 3 / 4; }
+	.references-shot{	
+		grid-column: 1 / 2; 
+		grid-row: 2 / 3; 
+	}
+	.references-nomenclature{	grid-column: 2 / 4; }
+	
+	.references-remaining{ display: block; }
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 520px), 
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 707px) {
+
+	.info-display-references{
+		grid-template-columns: 1.1fr 1.8fr 1fr;
+		grid-row-gap: calc(2 * var(--orientation-multiplier));
+		padding-bottom: calc(1.9 * var(--orientation-multiplier));
+	}
+
+	.references-shot .shot-playing{	display: inline; }
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 605px), 
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 824px) {
+
+	.info-display-references{
+		grid-template-columns: 1fr 1.5fr 1fr;
+		grid-row-gap: calc(2 * var(--orientation-multiplier)); 
+		padding-top: calc(1.4 * var(--orientation-multiplier));
+		padding-bottom: calc(1.7 * var(--orientation-multiplier));
+	}
+
+	.references-remaining{	grid-column: 2 / 3; text-align: left;}
+	.references-length{	grid-column: 3 / 4; }
+	.references-shot{	grid-column: 1 / 2; }
+	.references-nomenclature{	grid-column: 2 / 4; }
+
+}
+
+/*======================*/
+/*   VIDEO PLAYLISTS    */
+/*======================*/
+.info-display-playlists{
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: calc(5 * var(--orientation-multiplier));
+}
+
+.playlist{
+	display: none;
+	flex-wrap: wrap;
+	justify-content: center;
+	color: #000;
+	margin-right: calc(6 * var(--orientation-multiplier));
+	margin-bottom: calc(8.5 * var(--orientation-multiplier));
+	margin-left: calc(6 * var(--orientation-multiplier));
+}
+
+.playlist > li{ margin-right: 2px; }
+.playlist > li::after{ content: ', ';  }
+.playlist > li:last-child::after{ content: none; }
+
+.playlist-current{
+	color: var(--emphasis-color);
+}
+
+.playlist-current::after{ color: #000; }
+
+/* this value feeds JS for fool-proof textContent DOM replacement */
+body::before{ content: "1"; display: none; visibility: hidden; }
+
+.playlist:nth-child(1){ display: flex; }
+
+
+@media screen and (max-aspect-ratio: 4/3) {
+	
+	.info-display-playlists{
+		margin-top: calc(4 * var(--orientation-multiplier));
+	}
+
+	.playlist{
+		margin-right: calc(0 * var(--orientation-multiplier));
+		margin-bottom: calc(1 * var(--orientation-multiplier));
+		margin-left: calc(0 * var(--orientation-multiplier));
+		letter-spacing: -.7px;
+	}
+
+}
+
+@media screen and (max-aspect-ratio: 4/3) and (min-width: 320px) {
+
+	.playlist{
+		margin-right: calc(4 * var(--orientation-multiplier));
+		margin-bottom: calc(4 * var(--orientation-multiplier));
+		margin-left: calc(4 * var(--orientation-multiplier));
+		letter-spacing: 0;
+	}
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 320px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 435px) {
+
+	.playlist{
+		margin-right: calc(7 * var(--orientation-multiplier));
+		margin-bottom: calc(9 * var(--orientation-multiplier));
+		margin-left: calc(7 * var(--orientation-multiplier));
+	}
+
+	.playlist > li{ margin-right: 0; }
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 350px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 476px) {
+
+	.info-display-playlists{
+		justify-content: flex-start;
+		margin-top: calc(24 * var(--orientation-multiplier));
+	}
+
+	.playlist{
+		margin-right: calc(4.5 * var(--orientation-multiplier));
+		margin-left: calc(4.5 * var(--orientation-multiplier));
+	}
+
+	body::before{ content: "2"; }
+
+	.playlist:nth-child(2){ 
+		display: flex; 
+	}
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 400px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 544px) {
+
+		.info-display-playlists{ margin-top: calc(19 * var(--orientation-multiplier)); }
+
+		.playlist{
+			margin-right: calc(7.5 * var(--orientation-multiplier));
+			margin-bottom: calc(5 * var(--orientation-multiplier));
+			margin-left: calc(7.5 * var(--orientation-multiplier));
+		}
+
+		body::before{ content: "3"; }
+
+		.playlist:nth-child(3){
+			display: flex;
+		}
+}
+
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 450px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 612px) {
+
+		.info-display-playlists{ margin-top: calc(16 * var(--orientation-multiplier)); }
+
+		.playlist{
+			margin-right: calc(6.5 * var(--orientation-multiplier));
+			margin-bottom: calc(4 * var(--orientation-multiplier));
+			margin-left: calc(6.5 * var(--orientation-multiplier));
+		}
+
+		body::before{ content: "4"; }
+
+		.playlist:nth-child(4){
+			display: flex;
+		}
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 520px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 707px) {
+
+		.info-display-playlists{ margin-top: calc(17 * var(--orientation-multiplier)); }
+
+		.playlist{
+			margin-right: calc(5 * var(--orientation-multiplier));
+			margin-bottom: calc(4 * var(--orientation-multiplier));
+			margin-left: calc(5 * var(--orientation-multiplier));
+		}
+
+		body::before{ content: "5"; }
+
+		.playlist:nth-child(5){
+			display: flex;
+		}
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 600px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 816px) {
+
+		.info-display-playlists{ margin-top: calc(15 * var(--orientation-multiplier)); }
+
+		.playlist{
+			margin-right: calc(4.2 * var(--orientation-multiplier));
+			margin-bottom: calc(3.2 * var(--orientation-multiplier));
+			margin-left: calc(4.2 * var(--orientation-multiplier));
+		}
+
+		body::before{ content: "7"; }
+
+		.playlist:nth-child(6),
+		.playlist:nth-child(7){
+			display: flex;
+		}
+
+		/* when playlists are 7, substract some :first-child margin to match original work */
+		.playlist:nth-last-child(7){ margin-top: calc(-4 * var(--orientation-multiplier)); }
+
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 720px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 979px) {
+		
+		.info-display-playlists{ margin-top: calc(17 * var(--orientation-multiplier)); }
+
+		.playlist{
+			margin-right: calc(8.5 * var(--orientation-multiplier));
+			margin-bottom: calc(3 * var(--orientation-multiplier));
+			margin-left: calc(8.5 * var(--orientation-multiplier));
+		}
+
+}
+
+
+/*==============================*/
+/*   BUFFER STATUS ON BOTTOM    */
+/*==============================*/
+.info-display-buffer{
+	position: absolute;
+	bottom: calc(2 * var(--orientation-multiplier));
+	left: calc(3 * var(--orientation-multiplier));
+	color: var(--emphasis-color);
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (min-height: 500px),
+			 screen and (max-aspect-ratio: 4/3) and (min-width: 680px){
+
+	.info-display-buffer{
+		bottom: calc(1.5 * var(--orientation-multiplier));
+		left: calc(6 * var(--orientation-multiplier));
+	}
+
+}
