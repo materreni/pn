@@ -8,7 +8,7 @@ Project link: http://pn.terreni.com.ar
 
 
 ## Credits
-*P<sub>n</sub>=n!* was restored with ES6, CSS & HandBrakeCLI by [Marcelo Terreni](http://terreni.com.ar)
+*P<sub>n</sub>=n!* was restored with ES6, CSS & the HandBrake CLI by [Marcelo Terreni](http://terreni.com.ar)
 
 
 ## Legal disclaimer
