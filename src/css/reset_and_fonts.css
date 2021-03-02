@@ -67,16 +67,33 @@ table {
 /*======================*/
 
 @font-face {
-  font-family: "DINPro Cond Bold"; font-style: normal; font-weight: bold;
+  font-family: "DINPro Cond Bold"; 
+  font-style: normal; 
+  font-weight: bold;
   src: url('../fonts/dinpro/DINPro-CondBold.woff') format('woff2');
+}
+
+@font-face {
+  font-family: "DINPro Cond Bold"; 
+  font-style: italic; 
+  font-weight: normal;
+  src: url('../fonts/dinpro/DINPro-CondensedBoldItalic.woff') format('woff2');
 }
 
 @font-face {
   font-family: "Aktiv Grotesk"; 
   font-style: normal; 
   font-weight: 200;
-  src: url('../fonts/aktivgroteskaktivgrotesk_lt.woff2') format('woff2'),
+  src: url('../fonts/aktivgrotesk/aktivgrotesk_lt.woff2') format('woff2'),
   url('../fonts/aktivgrotesk/aktivgrotesk_lt.woff') format('woff');
+}
+
+@font-face {
+  font-family: "Aktiv Grotesk"; 
+  font-style: italic; 
+  font-weight: 200;
+  src: url('../fonts/aktivgrotesk/AktivGroteskW06-LightItalic.woff2') format('woff2'),
+  url('../fonts/aktivgrotesk/AktivGroteskW06-LightItalic.woff') format('woff');
 }
 
 @font-face {

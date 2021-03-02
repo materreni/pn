@@ -3,7 +3,7 @@
  * ES6 restoration for the media art installation developed in Macromedia Flash
  * Original work: http://www.ivan-marino.net/08/swf_as2/desastres/06.html (needs Adobe Flash Player)
 
- * @developer Marcelo Terreni (http://www.terreni.com.ar/)
+ * @developer Marcelo Terreni (http://terreni.com.ar/)
  * @CSS + E6 + HandBrakeCLI
  * @date June 2020
 **/
@@ -14,6 +14,7 @@
 
 html{
 	--line-color: rgba(255,255,255,.4);	
+	--special-white: #EBEAE5;
 }
 
 
@@ -26,11 +27,11 @@ body{
 
 .intro{
 	background: #151515;
-	background: radial-gradient(farthest-corner at -17% 70%, #112760 0%, #050720 40%) no-repeat 0 0;
+	background: #000;
 	color: #FFF;
 	box-sizing: border-box;
 	padding: 0 14px;
-	width: 100vw;
+	width: 100%;
 	min-height: 100%;
   position: absolute;
   z-index: 1;
@@ -42,7 +43,7 @@ body{
 	.intro{
 		width: 100%;
 		padding: 19px;
-		box-shadow: inset #050720 0 0 0 18px, inset var(--line-color) 0 0 0 19px;	
+		box-shadow: inset #000 0 0 0 18px, inset var(--line-color) 0 0 0 19px;
 	}
 
 }
@@ -55,16 +56,38 @@ body{
 	text-align: left;
 }
 
-@media screen and (min-width: 50em){
+.intro-description > *{	grid-column: 2 / 3;}
+
+.intro-description-loading-list{
+	grid-row: 2 / 3;
+}
+
+
+@media screen and (min-width: 70em){
 	.intro-description{
-		
+		display: grid;
+		grid-template-columns: 1fr minmax(0, 236px) 42rem 1fr;
+		grid-template-rows: max-content 1fr max-content;
+		margin-top: 8rem;
+		grid-gap: 0 3rem;
 	}
-}
 
-.intro-description > *{
-	grid-column: 2 / 3;
-}
+	/* Shamefull tweak for the longer spanish text */
+	html[lang="es"] .intro-description{
+		grid-template-columns: 1fr minmax(0, 236px) 44rem 1fr;
+	}
 
+	.intro-description-loading-list{
+		grid-row: 1 / 4;
+	}
+
+	.intro-description-title,
+	.intro-description-bio,
+	.intro-description-start-btn{
+		grid-column: 3 / 4;
+	}
+
+}
 
 /*===================*/
 /*  LANGUAGES MENU   */
@@ -89,14 +112,13 @@ body{
 	text-decoration: none;
 	font-weight: 200;
 	border: 1px solid var(--line-color);
-	padding: 9px 11px 7px 12px;
+	padding: 10px 11px 6px 12px;
 }
 
 .intro-langmenu a span{
 	position: absolute;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 0;
-  border: 0;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   height: 1px;
   width: 1px;
   overflow: hidden;
@@ -114,6 +136,8 @@ body{
 	}
 
 	.intro-langmenu a span{
+		clip: auto;
+	  clip-path: none;
 		position: static;
 	  height: auto;
 	  width: auto;
@@ -140,16 +164,8 @@ body{
 	font: bold 1.5rem/1.15 "DINPro Cond Bold", Arial, Helvetica, sans-serif;
 	text-transform: uppercase;
 	margin-top: 5px;
-	max-width: 34ch;
-	color: #B9FF2F;
-  background-image: linear-gradient(45deg, #B9FF2F 0, #B9FF2F 20%, #34B9E7 75%);
-
-  -webkit-background-clip: text;
-  background-clip: text;
-	
-	-webkit-text-fill-color: transparent; 
-  -moz-text-fill-color: transparent;
-  text-fill-color: transparent;
+	max-width: 36ch;
+	color: var(--special-white);
 }
 
 @media screen and (min-width: 25em){
@@ -164,15 +180,30 @@ body{
 	}
 }
 
+@media screen and (min-width: 70em){
+	.intro-description-title{
+		font-size: 2.625rem;
+		margin-top: 0;
+		margin-bottom: 2rem;
+	}
+}
+
 .intro-description-bio{
+	color: var(--special-white);
 	font-size: 0.9375rem;
 	line-height: 1.46;
+}
+
+@media screen and (min-width: 70em){
+	.intro-description-bio{
+		font-size: 1.125rem;
+		line-height: 1.46;
+	}
 }
 
 .intro-description-bio p{
 	margin-bottom: 1.3rem;
 }
-
 
 .intro-description-bio p a{
 	color: currentColor;
@@ -181,19 +212,40 @@ body{
 	border-bottom: 1px solid var(--line-color); 
 }
 
+.intro-description-bio cite, .intro-description-bio i{
+	font-style: italic;
+}
+
+.pn-title{ 
+	font-style: italic;
+	text-transform: none;
+}
+
+.pn-title:first-letter{ 
+	text-transform: uppercase; 
+}
+
+.pn-title sub {
+  position: relative;
+  bottom: -.1875em;
+  left: -.0625em;
+  font-size: .8125em; 
+  font-style: italic;
+}
+
+
 /* ====================== */
 /*     VIDEO LOADINGS     */
 /* ====================== */
 .intro-description-loading-list{
 	display: flex;
-	grid-row: 2 / 3;
 	justify-content: space-between;
 	margin: 1.5rem 0;
 }
 
 .intro-description-loading-list-item{
 	position: relative;
-	border: 1px solid #EEEAE8;
+	border: 1px solid var(--special-white);
 	width: 30%;
 	flex: 0 1 auto;
 	display: grid;
@@ -203,6 +255,31 @@ body{
 	justify-items: center;
 }
 
+/* Shamefull tweak for the longer spanish text */
+html[lang="es"] .intro-description-loading-list-item{
+	justify-items: left;
+}
+
+@media screen and (min-width: 31.875em){
+	html[lang="es"] .intro-description-loading-list-item{
+		justify-items: center;
+	}
+}
+
+@media screen and (min-width: 70em){
+	.intro-description-loading-list{
+		flex-direction: column;
+		justify-content: flex-start;
+		margin: 5px 0 0 0;
+	}
+
+	.intro-description-loading-list-item{
+		width: auto;
+		margin-bottom: 1.75rem;
+		border: 4px solid var(--special-white);
+	}
+}
+
 .intro-description-loading-list-item img, .intro-description-loading-list-item video{
 	grid-column: 1 / 2;
 	grid-row: 1 / 2;
@@ -210,6 +287,7 @@ body{
 	position: relative;
 	top: 0;
 	left: 0;
+	filter: grayscale(1);
 }
 
 .intro-description-loading-list-item p{
@@ -219,11 +297,31 @@ body{
 	text-transform: uppercase;
 	font-size: .6875rem;
 	font-weight: 700;
-	max-width: 9ch;
 	background: url(../img/loading.svg) no-repeat 0 0;
 	background-size: 16px 16px;
 	padding-left: 20px;
 }
+
+/* Shamefull tweak for the longer spanish text */
+html[lang="es"] .intro-description-loading-list-item p{
+	font-size: .625rem;
+	padding-left: 2px;
+	margin-left: 4px;
+}
+
+@media screen and (min-width: 21.875em){
+	html[lang="es"] .intro-description-loading-list-item p{
+		padding-left: 16px;
+	}
+}
+
+@media screen and (min-width: 27.5em){
+	html[lang="es"] .intro-description-loading-list-item p{
+		font-size: .6875rem;
+		padding-left: 20px;
+	}
+}
+
 
 .intro-description-loading-list-item video{ display: none; }
 .intro-description-loading-list-item_loaded video{	display: block; }
@@ -236,6 +334,11 @@ body{
 	bottom: 0;
 	left: 0;
 	background: rgba(0,0,0,.8);
+}
+
+.hidden .intro-description-loading-list-item p,
+.hidden .intro-description-loading-list-item::after{ 
+	display: none; 
 }
 
 .intro-description-loading-list-item::after, .intro-description-loading-list-item p{
@@ -258,25 +361,41 @@ body{
   background-color: transparent;
   cursor: pointer;
 
-	justify-self: start;
-	display: flex;
+  color: var(--special-white);
+  border: 1px solid var(--special-white);
+  max-width: 17.25rem;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  
+  display: flex;
 	align-items: center;
+	justify-content: space-between;
 	pointer-events: none; /* disable button till is ready */
-	font-weight: 700;
-}
-
-.intro-description-start-btn svg path:nth-child(1){
-	fill: #B9FF2F;
-}
-
-.intro-description-start-btn svg path:nth-child(2){
-	fill: #050720;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 
 .intro-description-start-btn span{
-	margin-left: 20px;
-	padding-top: 5px;
+	display: block;
+	width: 100%;
+	text-align: center;
+	letter-spacing: .075rem;
 }
+
+.intro-description-start-btn cite{
+	font-weight: 700;
+}
+
+.intro-description-start-btn svg{
+	padding: 6px 7px;
+	border-left: 1px solid var(--special-white);
+}
+
+.intro-description-start-btn:hover svg{
+	background: var(--special-white);
+	color: #000;
+}
+
 
 
 /*======================*/
@@ -301,7 +420,7 @@ body{
 /* ============= */
 .intro-description-credits{
 	font-size: 0.9375rem;
-	line-height: 1.3;
+	line-height: 1.46;
 	margin-bottom: 1.5rem
 }
 
@@ -314,7 +433,7 @@ body{
 	border-bottom: 1px solid var(--line-color);
 }
 
-@media screen and (min-width: 93em){
+@media screen and (min-width: 70em){
 
 	p.intro-description-credits{
 		position: absolute;
@@ -324,6 +443,7 @@ body{
 		transform: translateY(-50%) rotate(180deg);
 		text-transform: uppercase;
 		font-size: .6875rem;
+		line-height: 1.3;
 		letter-spacing: .05rem;
 		margin-bottom: 0;
 	}
@@ -365,7 +485,7 @@ body{
 		bottom: 31px;
 		right: 30px;
 		border: 1px solid var(--line-color);
-		padding: 13px 13px 10px 13px;
+		padding: 13px 13px 9px 13px;
 		width: auto;
 		margin-bottom: 0;
 		background: none;
@@ -382,6 +502,7 @@ body{
 .intro-description-viewsource strong{ font-weight: 700; }
 
 
+
 /*======================*/
 /*    INTRO FADE OUT    */
 /*======================*/
@@ -396,3 +517,81 @@ body{
 }
 
 .intro-off{ display: none; }
+
+
+
+/* =================== */
+/*    ERROR MESSAGE    */
+/* =================== */
+.intro-error-message{
+	position: absolute;
+	top: 8rem;
+	left: 50%;
+	transform: translateX(-50%);
+	box-sizing: border-box;
+	width: calc(100% - 24px);
+	padding: 55px 40px 50px 40px;
+	max-width: 24rem;
+	background: #FFF;
+	color: #000;
+	z-index: 2;
+	font-size: 1.0625rem;
+	line-height: 1.4;
+}
+
+.intro-error-message.hidden {
+	display: none;
+}
+
+.intro-error-message strong{ font-weight: 700; }
+
+.intro-error-message button{
+	padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 40px;
+	height: 46px;
+}
+
+.intro-error-message button span{
+	position: absolute !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+.intro-error-message button svg{
+	pointer-events: none;
+}
+
+@media screen and (min-width: 70em){
+	.intro-error-message{
+		font-size: 1.3125rem;
+		line-height: 1.58;
+		padding: 100px 90px;
+		width: 100%;
+		max-width: 47rem;
+		top: 50%;
+		left: 50%;
+		border: none;
+		transform: translate(-50%, -50%);
+		background: #000;
+		border: 1px solid rgba(255,255,255,.1);
+		color: var(--special-white);
+	}
+
+	.intro-error-message button{
+		color: var(--special-white);
+	}
+
+}

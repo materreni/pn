@@ -3,7 +3,7 @@
  * ES6 restoration for the media art installation developed in Macromedia Flash
  * Original work: http://www.ivan-marino.net/08/swf_as2/desastres/06.html (needs Adobe Flash Player)
 
- * @developer Marcelo Terreni (http://www.terreni.com.ar/)
+ * @developer Marcelo Terreni (http://terreni.com.ar/)
  * @CSS + E6 + HandBrakeCLI
  * @date June 2020
 **/
@@ -60,6 +60,8 @@ const sequenceData = {
 
 const init = () => {
 
+	const language = manageLang();
+
 	if ('MediaSource' in window && MediaSource.isTypeSupported(videoSrcData.mimeCodec)) {
 
 		/* Fill videoArrays with file blobs (mutates original array) */	
@@ -76,16 +78,18 @@ const init = () => {
 			 			buildPn(videoSrcData, videoArrays);
 			 		}
 			 	}else{
-			 		console.log('There was a problem loading video files. Please Try again later'); //USER ERROR
+			 		//Loading error
+			 		errorModal(language, 'loading');
 			 	}
 			})
 
 	}else{
-		console.log('Unsupported MIME type or codec: ', mimeCodec); //USER ERROR
+		//MediaSource not supported error
+		errorModal(language, 'browser', videoSrcData.mimeCodec);
+
+		//mimeCodec not supported error
+		console.log("This codec might not be supported: " + videoSrcData.mimeCodec);
 	}
-
-
-	manageLang();
 
 	function addButton(){
 		const btn = document.getElementsByClassName('intro-description-start-btn')[0];
@@ -95,6 +99,15 @@ const init = () => {
 			'click',
 			function(e){
 				buildPn(videoSrcData, videoArrays);
+
+				//stop videos before fade for smoother performance
+				const loadingsList = document.getElementsByClassName('intro-description-loading-list')[0];
+				const videoLoadings = loadingsList.getElementsByTagName('video');
+
+				for(let i = 0; i < videoLoadings.length; i++){
+					videoLoadings[i].pause();
+				}
+
 				intro.classList.add('fade-out');
 				intro.classList.add('intro-off');
 			}
@@ -661,6 +674,56 @@ function decimals(number, decPoints){
 }
 
 
+//===========================//
+//		ERROR MODAL WINDOW		 //
+//===========================//
+function errorModal(lang, mode, mimeCodec){
+
+	const texts = {
+		'close' : {
+			'en' : 'Close',
+			'es' : 'Cerrar'
+		},
+		'browser' : {
+			'en' : 'Your browser doesn’t seem to support the video technology used in this work (namely the MediaSource Element). Try with a desktop browser (<strong>Firefox</strong>, <strong>Chrome</strong>, <strong>Edge</strong> or <strong>Safari</strong>) or any phone with an <strong>Android operating system</strong>.',
+			'es' : 'Es posible que tu navegador no sea compatible con la tecnología de video usada por este sitio (especificamente el Elemento MediaSource). Probá con un navegador en tu computadora de escritorio (<strong>Firefox</strong>, <strong>Chrome</strong>, <strong>Edge</strong> o <strong>Safari</strong>) o cualquier teléfono con <strong>sistema operativo Android</strong>.'
+		},
+		'loading'	: {
+			'en' : 'There was a temporary problem loading the video files. Please try again later.',
+			'es' : 'Hubo un problema momentáneo con la carga de los archivos de video. Por favor intenta ingresar más tarde.'
+		}
+	}
+	
+	const modal = document.createElement('div');
+	modal.className = 'intro-error-message';
+
+	const button = document.createElement('button');
+	const span = '<span>' + texts["close"][lang] + '</span>';
+	const svg = '<svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="14px" height="14px" viewBox="0 0 14 14"><path fill="currentColor" d="M0,13.43c0.29-0.29,0.29-0.77,0-1.06L12.37,0 c0.29,0.29,0.77,0.29,1.06,0l0.35,0.35c-0.29,0.29-0.29,0.77,0,1.06L1.41,13.78c-0.29-0.29-0.77-0.29-1.06,0L0,13.43z"/><path fill="currentColor" d="M13.78,13.43c-0.29-0.29-0.29-0.77,0-1.06L1.41,0 C1.12,0.29,0.64,0.29,0.35,0L0,0.35c0.29,0.29,0.29,0.77,0,1.06l12.37,12.37c0.29-0.29,0.77-0.29,1.06,0L13.78,13.43z"/></svg>';
+
+	button.className = 'intro-error-close-btn';
+	button.innerHTML = span + svg;
+	button.addEventListener(
+		'click',
+		function(e){
+			e.currentTarget.parentNode.classList.add('hidden');
+		}
+	);
+
+	const paragraph = document.createElement('p');
+	paragraph.innerHTML = texts[mode][lang];
+
+	modal.appendChild(button);
+	modal.appendChild(paragraph);
+
+	const title = document.getElementsByClassName('intro-description-title')[0];
+	document.getElementsByClassName('intro-description-loading-list')[0].classList.add('hidden');
+
+	title.after(title, modal);
+
+}
+
+
 /*_______________________________________________________________________*/
 //                                    																	 //
 //                  EN/ES LANGUAGES SPECIFIC FUNCTIONS                   //
@@ -676,7 +739,7 @@ function manageLang(){
 
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
-	const lang = urlParams.get('lang');
+	let lang = urlParams.get('lang');
 	changeLang(lang || undefined);
 
 	if(lang){
@@ -684,6 +747,8 @@ function manageLang(){
 			langBtns[e].setAttribute('aria-current', '');
 		}
 		document.querySelector('.intro-langmenu a[lang="' + lang + '"]').setAttribute('aria-current', 'true');
+	}else{
+		lang = 'en';
 	}
 
 	//add events to language buttons in about page
@@ -699,6 +764,8 @@ function manageLang(){
 		});
 	}
 
+	return lang;
+
 }
 
 
@@ -710,20 +777,20 @@ function changeLang(lang = 'en'){
 	const translations = {
 		'en' : {
 			htmlTitle : 'A Javascript restoration of «Pn=n!» (2006) by Iván Marino :: Marcelo Terreni',
-			title: 'A Javascript restoration of <cite class="pn-title">P<sub>n</sub>=n!</cite>&nbsp;(2006) by <span lang="es">Iván Marino</span> built with ES6, MSE, CSS & HandbrakeCLI',
-			description: '<p>First exhibited in March 2006, <cite class="pn-title">P<sub>n</sub>=n!</cite> was a media art installation developed in Flash by the argentinian artist <span lang="es">Iván Marino</span>. A sequence from the film <cite lang="fr">“La Passion de Jeanne d\'Arc”</cite> (1928) by Carl T. Dreyer was divided into its constituent shots and repurposed to address the idea of torture as an algorithm, a piece of software. For every new sequence in the project, an individual shot from the film was randomly selected and reedited into a new progression that would fatally mirror the three semantic cornerstones present in several torture procedures: victims, victimizers and torture instruments.</p>\n<p>For this conservation project I rewrote the code from scratch with ES6, used the MediaSource Element to manage video playback and built a responsive CSS layout to meet the requirements of the modern web. Although the source video was reprocessed with HandbrakeCLI from a more recent transfer of the film, I took care to mimic the look and feel of the original *.flv files in After Effects. A detailed tutorial of this new media restoration work is coming up soon. Meanwhile, <a href="http://terreni.com.ar">check any of the other works in my personal portfolio</a>.</p>',
+			title: 'A Javascript restoration of <cite class="pn-title">P<sub>n</sub>=n!</cite>&nbsp;(2006) by <span lang="es">Iván Marino</span> built with ES6, CSS, the MSE & the HandBrake CLI',
+			description: '<p>First exhibited in March 2006, <cite class="pn-title">P<sub>n</sub>=n!</cite> was a media art installation developed in Flash by the argentinian artist <span lang="es">Iván Marino</span>. A sequence from the film <cite lang="fr">“La Passion de Jeanne d\'Arc”</cite> (1928) by Carl T. Dreyer was divided into its constituent shots and repurposed to address the idea of torture as an algorithm, a piece of software. For every new sequence in the project, an individual shot from the film was randomly selected and reedited into a new progression that would fatally mirror the three semantic cornerstones present in several torture procedures: victims, victimizers and torture instruments.</p>\n<p>For this conservation project I rewrote the code from scratch with ES6, used the MediaSource Element to manage video playback and built a responsive CSS layout to meet the requirements of the modern web. Although the source video was reprocessed with the HandBrake CLI from a more recent transfer of the film, I took care to mimic the look and feel of the original *.flv files in After Effects. A detailed tutorial of this new media restoration work is coming up soon. Meanwhile, <a href="http://terreni.com.ar">check any of the other works in my personal portfolio</a>.</p>',
 			viewwork : 'View <cite class="pn-title">P<sub>n</sub>=n!</cite> restoration',
-			loadings : ['Loading Judges', 'Loading Jeanne', 'Loading Machines'],
-			credits : 'Restored with ES6, CSS & HandbrakeCLI by <a href="http://terreni.com.ar">Marcelo Terreni</a>',
+			loadings : ['Loading <br /> Judges', 'Loading <br /> Jeanne', 'Loading <br /> Machines'],
+			credits : 'Restored with ES6, CSS & the HandBrake&nbsp;CLI by <a href="http://terreni.com.ar">Marcelo Terreni</a>',
 			viewsource : 'View source in <strong>GitHub</strong>'
 		},
 		'es' : {
 			htmlTitle : 'Una versión en Javascript de «Pn=n!» (2006) de Iván Marino :: Marcelo Terreni',
-			title: 'Un ejercicio de preservación sobre la obra Pn=n!&nbsp;(2006) de Iván Marino desarrollado con ES6, MSE, CSS & HandbrakeCLI',
-			description: '<p>Exhibida por primera vez en marzo de 2006, <cite class="pn-title">P<sub>n</sub>=n!</cite> es una instalación programada en Flash por el artista argentino Iván Marino. El autor dividió una secuencia del film <cite lang="fr">“La Passion de Jeanne d\'Arc”</span> (1928) de Carl T. Dreyer en sus planos constituitivos para luego resignificarlos en una meditación sobre la tortura como algoritmo, como un proceso suceptible de ser transformado en software. En cada nueva secuencia del proyecto, una toma individual del film era seleccionada y remontada en una nueva progresión de planos que sigue el orden de los tres pilares semánticos presentes en varios procedimientos de tortura: víctimas, victimarios e instrumentos de tortura.</p>\n<p>Para este proyecto de restauración reescribí el código con ES6, use el elemento <span lang="en">MediaSource</span> para manejar la reproducción de video y construí vía CSS un diseño mejor adaptado a los requerimientos de la web moderna. Aunque el material fue recomprimido con HandbrakeCLI a partir de un transfer más reciente del film, me tomé el trabajo de imitar el aspecto de los archivos *.flv originales en After Effects para conseguir una reproducción lo más fiel posible. Prontó escribiré un tutorial detallado sobre las soluciones que encontré durante el trabajo de restauración. Mientras tanto, <a href="http://terreni.com.ar">te invito a navegar alguno de los otros trabajos exhibidos en mi portfolio personal</a>.</p>',
+			title: 'Un ejercicio de preservación sobre <cite class="pn-title">P<sub>n</sub>=n!</cite>&nbsp;(2006) de Iván Marino con ES6, CSS, el MSE & la CLI de HandBrake',
+			description: '<p>Exhibida por primera vez en marzo de 2006, <cite class="pn-title">P<sub>n</sub>=n!</cite> es una instalación programada en Flash por el artista argentino Iván Marino. El autor dividió una secuencia del film <cite lang="fr">“La Passion de Jeanne d\'Arc”</cite> (1928) de Carl T. Dreyer en sus planos constituitivos para luego resignificarlos en una meditación sobre la tortura como algoritmo, como un proceso suceptible de ser transformado en software. En cada nueva secuencia del proyecto, una toma individual del film era seleccionada y remontada en una nueva progresión de planos que sigue el orden de los tres pilares semánticos presentes en varios procedimientos de tortura: víctimas, victimarios e instrumentos de tortura.</p>\n<p>Para este proyecto de restauración reescribí el código con ES6, use el elemento <span lang="en">MediaSource</span> para manejar la reproducción de video y construí vía CSS un diseño mejor adaptado a los requerimientos de la web moderna. Aunque el material fue recomprimido con la CLI de HandBrake a partir de un transfer más reciente del film, me tomé el trabajo de imitar el aspecto de los archivos *.flv originales en After Effects para conseguir una reproducción lo más fiel posible. Prontó escribiré un tutorial detallado sobre las soluciones que encontré durante el trabajo de restauración. Mientras tanto, <a href="http://terreni.com.ar">te invito a navegar alguno de los otros trabajos exhibidos en mi portfolio personal</a>.</p>',
 			viewwork : 'Ver <cite class="pn-title">P<sub>n</sub>=n!</cite> restaurada',
-			loadings : ['Cargando Jueces', 'Cargando Juana', 'Cargando Instrumentos'],
-			credits : 'Obra restaurada con ES6, CSS & HandbrakeCLI por <a href="http://terreni.com.ar">Marcelo Terreni</a>',
+			loadings : ['Cargando <br /> Jueces', 'Cargando <br /> Juana', 'Cargando <br /> Instrumentos'],
+			credits : 'Restaurada con ES6, CSS & la CLI de HandBrake por <a href="http://terreni.com.ar">Marcelo Terreni</a>',
 			viewsource : 'Ver el código en <strong>GitHub</strong>'
 		}
 	};
@@ -746,7 +813,7 @@ function changeLang(lang = 'en'){
 	pnIntroViewsource.innerHTML = translations[lang].viewsource;
 
 	for(let i = 0; i < pnIntroLoadings.length; i++){
-		pnIntroLoadings[i].textContent = translations[lang].loadings[i];
+		pnIntroLoadings[i].innerHTML = translations[lang].loadings[i];
 	}
 
 }
